@@ -21,8 +21,8 @@ const Header = () => {
 
         {/* MENU */}
         <div className="hidden md:flex space-x-10 font-semibold text-lg">
-          <a href="#" className="hover:underline">Home</a>
-          <a href="#" className="hover:underline">Blog</a>
+          <a href="/" className="hover:underline">Home</a>
+          <a href="/all_review" className="hover:underline">Blog</a>
           <a href="#" className="hover:underline">About</a>
         </div>
 

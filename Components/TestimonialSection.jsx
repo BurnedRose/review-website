@@ -96,7 +96,7 @@ const testimonials = [
 
 const TestimonialSection = () => {
   return (
-    <div className="bg-black pt-16 pb-4 text-center text-white">
+    <div className="bg-[#2e2e2e] pt-16 pb-4 text-center text-white">
     <h2 className="text-4xl sm:text-5xl font-bold mb-10">
       What They Say <span className="underline" style={{ textDecorationColor: "#007a47" }}>About Us</span>
     </h2>
