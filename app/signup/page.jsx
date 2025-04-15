@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import Header from "../../Components/header";
 import Footer from '@/Components/homepage/Footer';
 
 export default function SignupPage() {
@@ -52,7 +51,7 @@ export default function SignupPage() {
 
   return (
     <>
-      <Header />
+      
       <div className="flex items-center justify-center min-h-screen bg-[#2e2e2e]">
         <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md text-center">
           <h2 className="text-2xl font-bold text-green-700">Create new Account</h2>

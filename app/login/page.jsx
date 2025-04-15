@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Header from "../../Components/header"; // assuming Header is a default export
+
 import Footer from "../../Components/homepage/Footer";
 export default function LoginPage() {
   const router = useRouter();
@@ -32,8 +32,6 @@ export default function LoginPage() {
 
   return (
     <>
-      <Header />
-
       <div className="flex items-center justify-center min-h-screen bg-[#2e2e2e]">
         <div className="bg-[#7ea566] rounded-lg p-8 shadow-md w-96">
           <h2 className="text-2xl font-bold text-center mb-2 text-white">Welcome</h2>
