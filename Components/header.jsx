@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 const Header = () => {
   return (
-    <div className="bg-[#7BAE67] text-white px-6 sm:px-12 lg:px-24 py-4"> {/* ✅ ความสูงแทบเขียว */}
+    <div className="bg-[#7BAE67] text-white px-6 sm:px-12 lg:px-24 py-4"> {/* ความสูงแทบเขียว */}
       {/* NAVBAR */}
       <div className="flex justify-between items-center">
         {/* LOGO */}
@@ -13,9 +13,9 @@ const Header = () => {
           <Image
             src={assets.logo}
             alt="logo"
-            width={160}       // ✅ โลโก้เล็กลง
+            width={160}       
             height={60}
-            className="h-[60px] w-auto" // ✅ จำกัดขนาดเฉพาะโลโก้
+            className="h-[60px] w-auto"
           />
         </div>
 
