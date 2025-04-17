@@ -25,7 +25,7 @@ const testimonials = [
   {
     name: "Drew Feig",
     department: "ComSci",
-    content: "นักศึกษาส่วนใหญ่มีความเป็นกันเองและช่วยเหลือกันดี มีชมรมและโครงการที่ช่วยส่งเสริมทักษะทั้งในด้านวิชาการและ Soft Skills ...",
+    content: "นักศึกษาส่วนใหญ่มีความเป็นกันเองและช่วยเหลือกันดี มีชมรมและโครงการที่ช่วยส่งเสริมทักษะทั้งในด้านวิชาการและ Soft Skills อื่นๆอีกมากมาย ซึ่ง...",
     stars: 5,
     avatar: "/profile3.jpg",
   },
@@ -67,7 +67,7 @@ const testimonials = [
   {
     name: "Drew Feig",
     department: "ComSci",
-    content: "นักศึกษาส่วนใหญ่มีความเป็นกันเองและช่วยเหลือกันดี มีชมรมและโครงการที่ช่วยส่งเสริมทักษะทั้งในด้านวิชาการและ Soft Skills ...",
+    content: "นักศึกษาส่วนใหญ่มีความเป็นกันเองและช่วยเหลือกันดี มีชมรมและโครงการที่ช่วยส่งเสริมทักษะทั้งในด้านวิชาการและ Soft Skills อื่นๆอีกมากมาย ซึ่ง...",
     stars: 5,
     avatar: "/profile3.jpg",
   },
@@ -101,7 +101,7 @@ const TestimonialSection = () => {
       What They Say <span className="underline" style={{ textDecorationColor: "#007a47" }}>About Us</span>
     </h2>
   
-    <div className="px-4 max-w-6xl mx-auto">
+    <div className="px-4 max-w-6xl mx-auto relative">
       <Swiper
         modules={[Navigation, Pagination, Autoplay, Grid]}
         navigation
@@ -126,8 +126,8 @@ const TestimonialSection = () => {
         }}
       >
         {testimonials.map((review, idx) => (
-        <SwiperSlide key={idx} className="flex">
-        <div className="bg-[#FFFDEB] text-black rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300 p-4 w-full h-full min-h-[250px] flex flex-col justify-between relative">
+        <SwiperSlide key={idx} className="h-full">
+        <div className="bg-[#FFFDEB] text-black rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300 p-4 w-full h-full flex flex-col justify-between relative min-h-full">
           
           <div className="flex justify-end mb-2">
             <div className="flex text-yellow-500 mt-2">
@@ -137,7 +137,7 @@ const TestimonialSection = () => {
             </div>
           </div>
       
-          <div className="text-left text-4sm mb-4 mt-4">{review.content}</div>
+          <div className="text-left text-4sm mb-4 mt-4 line-clamp-4">{review.content}</div>
       
           <div className="flex items-center gap-3 pt-4 border-t border-gray-300 mt-auto">
             <img src={review.avatar} alt={review.name} className="w-10 h-10 rounded-full" />
