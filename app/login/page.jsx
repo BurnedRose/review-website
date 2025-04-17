@@ -57,7 +57,7 @@ export default function LoginPage() {
               <div className="flex justify-center mb-5">
                 <div className="bg-white p-3 rounded-full shadow-lg">
                   <Image 
-                    src="/logo.png" 
+                    src="/logo1.png" 
                     alt="Company Logo"
                     width={100} 
                     height={40} 
@@ -146,16 +146,12 @@ export default function LoginPage() {
                 </button>
               </form>
               
-              <div className="mt-8">
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-white border-opacity-30"></div>
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-gradient-to-r from-[#8aba74] to-[#6b9654] text-white font-medium">Or</span>
-                  </div>
-                </div>
-                
+              <div className="relative w-full my-6">
+  <       div className="flex items-center w-full">
+          <div className="flex-grow border-t border-white border-opacity-30"></div>
+          <span className="px-4 text-white text-sm font-medium">Or</span>
+         <div className="flex-grow border-t border-white border-opacity-30"></div>
+        </div>
                 <div className="mt-6">
                   <button
                     onClick={() => alert("Microsoft login clicked!")}
