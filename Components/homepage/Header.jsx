@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
-import { assets } from "@/Assets/assets";
 import Link from 'next/link';
+import logo from "../../public/logo.png"
 
 const Header = () => {
   return (
@@ -11,7 +11,7 @@ const Header = () => {
         {/* LOGO */}
         <div className="flex items-center">
           <Image
-            src={assets.logo}
+            src={logo.png}
             alt="logo"
             width={160}       
             height={60}
