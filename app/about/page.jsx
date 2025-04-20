@@ -10,19 +10,19 @@ const teamMembers = [
   {
     name: 'Kamik Piboonchaisit',
     role: 'นักพัฒนา backend',
-    img: 'M.jpg',
+    img: 'T.jpg',
     id: '2210511101016',
   },
   {
     name: 'Satchakorn Chansri',
     role: 'นักพัฒนา frontend',
-    img: 'S.jpg',
+    img: 'S1.jpg',
     id: '2210511101037',
   },
   {
     name: 'Khemapat Yungprayoor',
     role: 'นักพัฒนา frontend',
-    img: 'k.jpg',
+    img: 'k2.jpg',
     id: '2210511101060',
   },
 ];
@@ -31,7 +31,7 @@ const visionMission = [
   {
     icon: <FaRocket className="text-[#2b5d4a] text-2xl mb-3" />,
     title: "วิสัยทัศน์",
-    description: "มุ่งสร้างแพลตฟอร์มรีวิวที่โปร่งใส เข้าถึงง่าย และเป็นแหล่งข้อมูลที่ผู้ใช้สามารถเชื่อถือได้จริง เพื่อเป็นประโยชน์แก่นักศึกษาและผู้ที่สนใจ"
+    description: "มุ่งสร้างแพลตฟอร์มรีวิวที่โปร่งใส เข้าถึงง่าย และเป็นแหล่งข้อมูลที่ผู้ใช้สามารถเชื่อถือได้จริง เพื่อเป็นประโยชน์แก่นักเรียนนักศึกษาและผู้ที่สนใจ"
   },
   {
     icon: <FaUsers className="text-[#2b5d4a] text-2xl mb-3" />,
@@ -61,7 +61,7 @@ const AboutPage = () => {
             เพื่อช่วยให้ผู้คนได้รับข้อมูลที่เป็นประโยชน์ก่อนการตัดสินใจ
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6">
-            <a href="#about-us" className="px-6 py-2 bg-[#2b5d4a] text-white font-medium rounded-md hover:bg-[#7ea566] transition">เกี่ยวกับเรา</a>
+            <a href="#our-team" className="px-6 py-2 bg-[#2b5d4a] text-white font-medium rounded-md hover:bg-[#7ea566] transition">เกี่ยวกับเรา</a>
             <a href="/blog" className="px-6 py-2 bg-white border border-[#7ea566] text-[#2b5d4a] font-medium rounded-md hover:bg-[#f0e6d9] transition">อ่านรีวิว</a>
           </div>
         </div>
@@ -81,7 +81,7 @@ const AboutPage = () => {
             </div>
             <div className="space-y-4 text-[#4a4a4a]">
               <p>เว็บไซต์นี้จัดทำขึ้นภายใต้โครงงานวิชาพัฒนาเว็บ โดยมีเป้าหมายเพื่อสร้างแพลตฟอร์มสำหรับรีวิวประสบการณ์และข้อมูลเชิงลึกเกี่ยวกับมหาวิทยาลัย</p>
-              <p>ด้วยการออกแบบที่ทันสมัย ใช้งานง่าย และคำนึงถึงประสบการณ์ของผู้ใช้ ทีมผู้พัฒนาต้องการยกระดับคุณภาพของการแลกเปลี่ยนความคิดเห็นในโลกดิจิทัล</p>
+              <p>ด้วยการออกแบบที่ใช้งานง่าย และคำนึงถึงประสบการณ์ของผู้ใช้ ทีมผู้พัฒนาต้องการยกระดับคุณภาพของการแลกเปลี่ยนความคิดเห็นในโลกดิจิทัล</p>
               <p>เราเชื่อว่าการแชร์ประสบการณ์อย่างเปิดกว้างในสภาพแวดล้อมที่ปลอดภัยและเป็นกลาง จะช่วยเสริมสร้างความเข้าใจและสร้างชุมชนออนไลน์ที่แข็งแรงและมีคุณภาพ</p>
             </div>
           </div>
@@ -134,7 +134,7 @@ const AboutPage = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {teamMembers.map((member, index) => (
-              <div key={index} className="bg-white rounded-xl shadow-md overflow-hidden border border-[#f0e6d9]">
+              <div key={index} className="bg-[#f7f5f2] rounded-xl shadow-md overflow-hidden border border-[#f3e2cc]">
                 <div className="h-1 bg-gradient-to-r from-[#7ea566] to-[#2b5d4a]"></div>
                 <div className="p-8">
                   <div className="relative w-32 h-32 mx-auto mb-6">
@@ -151,42 +151,73 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* Contact */}
-      <section id="contact" className="py-16 px-4 bg-[#2b5d4a] text-white font-[Prompt]">
-        <div className="container mx-auto max-w-3xl">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold">ติดต่อเรา</h2>
-            <div className="w-16 h-1 bg-[#7ea566] mx-auto mt-3"></div>
-          </div>
-          <div className="bg-[#2b5d4a] bg-opacity-80 rounded-lg p-6 border border-[#7ea566]">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <FaEnvelope className="text-[#f8f5f0]" />
-                  <span>ส่งข้อความถึงเรา</span>
-                </h3>
-                <p className="text-[#f8f5f0] mb-4">
-                  สนใจร่วมงานกับเรา หรือมีข้อเสนอแนะใดๆ สามารถส่งข้อความถึงเราได้
-                </p>
-                <a href="mailto:contact@unireview.com" className="inline-flex items-center gap-2 bg-[#f0e6d9] text-[#2b5d4a] font-medium px-4 py-2 rounded-md hover:bg-white transition">
-                  <FaEnvelope />
-                  ติดต่อทางอีเมล
-                </a>
-              </div>
-              <div className="md:border-l md:border-[#7ea566] md:pl-6">
-                <h3 className="text-lg font-semibold mb-3">ติดตามเรา</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {["facebook", "instagram"].map((platform, idx) => (
-                    <a key={idx} href="#" className="flex justify-center items-center bg-[#7ea566] bg-opacity-30 hover:bg-opacity-40 px-3 py-2 rounded-md transition">
-                      <span className="capitalize">{platform}</span>
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+  {/* Contact */}
+<section id="contact" className="py-20 px-6 bg-[#2b5d4a] text-white font-[Prompt]">
+  <div className="container mx-auto max-w-4xl">
+    <div className="text-center mb-12">
+      <h2 className="text-4xl font-bold">ติดต่อเรา</h2>
+      <div className="w-20 h-1 bg-[#a5d6a7] mx-auto mt-4 rounded-full"></div>
+    </div>
+    
+    <div className="bg-[#2b5d4a]/80 rounded-2xl p-8 border border-[#a5d6a7] shadow-lg">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+
+        {/* ฟอร์มติดต่อ */}
+        <div>
+          <h3 className="text-xl font-semibold mb-3 flex items-center gap-3">
+            <FaEnvelope className="text-[#f9faf8] text-2xl" />
+            <span>ส่งข้อความถึงเรา</span>
+          </h3>
+          <p className="text-[#f9faf8] mb-6">
+            มีคำถามหรือข้อเสนอแนะ? ส่งข้อความถึงเราได้ทุกเมื่อ เรายินดีรับฟัง
+          </p>
+          
+          <form 
+            action="https://formsubmit.co/reviewweb95@gmail.com" 
+            method="POST" 
+            className="grid gap-4"
+          >
+            <input 
+              type="text" 
+              name="name" 
+              required 
+              placeholder="ชื่อของคุณ" 
+              className="p-3 rounded-md bg-white text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#a5d6a7]"
+            />
+            <textarea 
+              name="message" 
+              required 
+              placeholder="ข้อความของคุณ" 
+              className="p-3 rounded-md bg-white text-black h-32 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#a5d6a7]"
+            ></textarea>
+
+            {/* ปิด captcha และ redirect หลังส่ง */}
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_next" value="/https://yourdomain.com/thank-you" />
+
+            <button 
+              type="submit" 
+              className="bg-[#f9faf8] text-[#2b5d4a] px-6 py-3 rounded-md font-semibold hover:bg-white transition duration-300"
+            >
+              ส่งข้อความ
+            </button>
+          </form>
         </div>
-      </section>
+
+        {/* (Optional) เพิ่มด้านข้าง - ข้อมูลการติดต่อ / social media */}
+        <div className="hidden md:block border-l border-[#a5d6a7] pl-8">
+          <h4 className="text-lg font-semibold mb-4">ข้อมูลการติดต่อ</h4>
+          <ul className="space-y-3 text-[#f9faf8] text-sm">
+            <li><strong>อีเมล:</strong> reviewweb95@gmail.com</li>
+            <li><strong>ที่อยู่:</strong> มหาวิทยาลัย UTCC </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 
       {/* Footer */}
       <footer className="bg-[#4a4a4a] text-[#f8f5f0] py-4 text-center text-sm font-[Prompt]">
