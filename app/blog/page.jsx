@@ -2,7 +2,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { 
   FaSearch, FaTag, FaTimes, FaStar, 
-  FaSort, FaEye, FaThumbsUp, FaChartBar
+  FaSort, FaEye, FaThumbsUp, FaChartBar,
+  FaUser
 } from "react-icons/fa";
 import Header from '../all_review/header';
 
@@ -12,7 +13,7 @@ export default function blogPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedReview, setSelectedReview] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [sortOption, setSortOption] = useState("highest");  // Changed default from "latest" to "highest"
+  const [sortOption, setSortOption] = useState("highest");
   const [starFilter, setStarFilter] = useState(0);
   const [filteredReviews, setFilteredReviews] = useState([]);
 
@@ -27,7 +28,6 @@ export default function blogPage() {
     // Sort results
     let sortedResults = [...results];
     
-    // Removed "latest" and "oldest" sorting options
     if (sortOption === "highest") {
       sortedResults.sort((a, b) => (b.rating || 0) - (a.rating || 0));
     } else if (sortOption === "lowest") {
@@ -68,19 +68,20 @@ export default function blogPage() {
         const res = await fetch("/api/review");
         const data = await res.json();
         if (data.success) {
-          const reviewsWithProcessedDates = data.reviews.map(review => {
+          const reviewsWithProcessedData = data.reviews.map(review => {
             return {
               ...review,
               views: review.views || 0,
-              likes: review.likes || 0
-              // Removed date processing since we don't use dates for sorting anymore
+              likes: review.likes || 0,
+              // Process the MongoDB fields directly
+              // Using authorImg for the profile image as per your MongoDB schema
             };
           });
           
-          setReviews(reviewsWithProcessedDates);
+          setReviews(reviewsWithProcessedData);
         }
       } catch (error) {
-        // Silent error handling
+        console.error("Error fetching reviews:", error);
       } finally {
         setLoading(false);
       }
@@ -147,18 +148,51 @@ export default function blogPage() {
     return colors[hash % colors.length];
   };
 
-  const ProfileAvatar = ({ author, size = "md" }) => {
+  const ProfileAvatar = ({ review, size = "md" }) => {
+    // Use the MongoDB schema field names directly
+    const author = review?.author || "?";
+    const profileImage = review?.authorImg || null;
+    
+    // Generate a consistent color based on author name if needed
+    const bgColor = getRandomProfileColor(author);
+    
+    // Get initials for text display
     const initials = author?.charAt(0) || "?";
-    const bgColor = getRandomProfileColor(author || "");
+    
+    // Size classes for different avatar sizes
     const sizeClass = {
       sm: "w-8 h-8 text-sm",
       md: "w-10 h-10 text-base", 
       lg: "w-12 h-12 text-lg"
     }[size];
     
+    // If profile image exists, render image avatar
+    if (profileImage) {
+      return (
+        <div className={`${sizeClass} rounded-full overflow-hidden flex-shrink-0`}>
+          <img 
+            src={profileImage} 
+            alt={`${author}'s profile`}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              // Fallback to initials on image load error
+              e.target.style.display = 'none';
+              e.target.parentNode.classList.add('flex', 'items-center', 'justify-center');
+              e.target.parentNode.style.backgroundColor = bgColor;
+              const textElement = document.createElement('span');
+              textElement.className = 'text-white font-semibold';
+              textElement.textContent = initials.toUpperCase();
+              e.target.parentNode.appendChild(textElement);
+            }}
+          />
+        </div>
+      );
+    }
+    
+    // Otherwise render initials avatar
     return (
       <div 
-        className={`${sizeClass} rounded-full flex items-center justify-center text-white font-semibold`}
+        className={`${sizeClass} rounded-full flex items-center justify-center text-white font-semibold flex-shrink-0`}
         style={{ backgroundColor: bgColor }}
       >
         {initials.toUpperCase()}
@@ -182,9 +216,9 @@ export default function blogPage() {
           </div>
           
           <div className="p-4 md:p-6">
-            {/* Author info with avatar */}
+            {/* Author info with avatar - passing the whole review object */}
             <div className="flex items-center mb-4">
-              <ProfileAvatar author={selectedReview.author} size="lg" />
+              <ProfileAvatar review={selectedReview} size="lg" />
               <div className="ml-3">
                 <p className="font-medium text-[#2b5d4a]">{selectedReview.author}</p>
                 {selectedReview.date && (
@@ -410,9 +444,9 @@ export default function blogPage() {
                     onClick={() => openReviewModal(review)}
                   >
                     <div className="p-4">
-                      {/* Review header with author avatar */}
+                      {/* Review header with author avatar - passing the whole review object */}
                       <div className="flex items-center mb-3">
-                        <ProfileAvatar author={review.author} size="sm" />
+                        <ProfileAvatar review={review} size="sm" />
                         <div className="ml-2 flex-1 min-w-0">
                           <p className="font-medium text-[#2b5d4a] truncate">{review.author}</p>
                           {review.date && (
