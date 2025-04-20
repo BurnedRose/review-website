@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Footer from "../../Components/homepage/Footer";
+import Footer from "../../Components/Footer";
 import Image from "next/image";
 
 export default function LoginPage() {
@@ -14,7 +14,7 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
 
   const users = [
-    { email: "eki@gmail.com", password: "eki00" },
+    { email: "eki@gmail.com", password: "eki0000" },
     { email: "test@example.com", password: "password123" },
   ];
 
@@ -29,7 +29,7 @@ export default function LoginPage() {
       );
       
       if (userExists) {
-        router.push("/welcome");
+        router.push("/all_review");
       } else {
         setErrorMessage("Invalid email or password. Please try again.");
       }
