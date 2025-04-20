@@ -10,19 +10,19 @@ const teamMembers = [
   {
     name: 'Kamik Piboonchaisit',
     role: 'นักพัฒนา backend',
-    img: 'https://i.pravatar.cc/150?img=1',
+    img: 'M.jpg',
     id: '2210511101016',
   },
   {
     name: 'Satchakorn Chansri',
     role: 'นักพัฒนา frontend',
-    img: 'https://i.pravatar.cc/150?img=2',
+    img: 'S.jpg',
     id: '2210511101037',
   },
   {
     name: 'Khemapat Yungprayoor',
     role: 'นักพัฒนา frontend',
-    img: 'https://i.pravatar.cc/150?img=3',
+    img: 'k.jpg',
     id: '2210511101060',
   },
 ];
@@ -74,7 +74,7 @@ const AboutPage = () => {
             <h2 className="text-3xl font-bold text-[#2b5d4a]">เรื่องราวของเรา</h2>
             <div className="w-16 h-1 bg-[#7ea566] mx-auto mt-3"></div>
           </div>
-          <div className="max-w-3xl mx-auto bg-[#f0e6d9] p-6 rounded-lg">
+          <div className="max-w-3xl mx-auto bg-[#f7efe4] p-6 rounded-lg">
             <div className="flex items-center gap-3 mb-4">
               <FaInfoCircle className="text-[#2b5d4a] text-xl" />
               <h3 className="text-xl font-semibold text-[#2b5d4a]">แพลตฟอร์มรีวิวมหาวิทยาลัยที่สร้างสรรค์โดยนักศึกษาเพื่อนักศึกษา</h3>
@@ -143,7 +143,7 @@ const AboutPage = () => {
                   </div>
                   <h3 className="text-xl font-semibold text-[#2b5d4a]">{member.name}</h3>
                   <p className="text-[#7ea566] font-medium mb-3">{member.role}</p>
-                  <p className="text-[#a8a195] text-sm mb-4">รหัสนักศึกษา: {member.id}</p>
+                  <p className="text-[#5c564c] text-sm mb-4">รหัสนักศึกษา: {member.id}</p>
                 </div>
               </div>
             ))}
