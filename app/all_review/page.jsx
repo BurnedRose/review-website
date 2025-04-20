@@ -67,8 +67,8 @@ export default function AllReviewPage() {
     if (!selectedReview) return null;
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-        <div className="bg-[#f8f4eb] rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-xl">
+      <div className="fixed inset-0 bg-[rgba(248,244,235,0.7)] flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-xl">
           <div className="bg-[#2b5d4a] text-[#f8f4eb] rounded-t-lg p-4">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold">{selectedReview.title}</h2>
@@ -96,7 +96,7 @@ export default function AllReviewPage() {
               )}
             </div>
           </div>
-          <div className="bg-[#e5e1d8] bg-opacity-40 px-6 py-4 rounded-b-lg">
+          <div className="bg-white bg-opacity-40 px-6 py-4 rounded-b-lg">
             <button onClick={closeModal} className="w-full py-3 px-4 bg-[#7ea566] text-white rounded-md hover:bg-[#568f3e] font-medium">
               Close
             </button>
@@ -138,15 +138,17 @@ export default function AllReviewPage() {
                 <FaTag className="text-[#f8f4eb]" />
               </div>
               <select
-                className="pl-10 pr-4 py-3 w-full border border-[#2b5d4a] rounded-lg bg-[#2b5d4a] text-[#f8f4eb] focus:ring-2 focus:ring-[#7ea566] focus:border-[#7ea566]"
-                value={filterCategory}
-                onChange={(e) => setFilterCategory(e.target.value)}
-              >
-                <option value="">All Categories</option>
-                {categories.map((category, idx) => (
-                  <option key={idx} value={category}>{category}</option>
-                ))}
-              </select>
+              className="pl-10 pr-10 py-3 w-full h-12 text-base rounded-lg bg-[#2b5d4a] text-[#f8f4eb] 
+              border border-[#2b5d4a] hover:border-[#7ea566] focus:ring-2 focus:ring-[#7ea566] focus:outline-none
+              transition duration-150 appearance-none" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}
+              aria-label="Filter by category">
+         <option value="">All Categories</option>
+         {categories.map((category, idx) => (
+          <option key={idx} value={category}>
+          {category}
+          </option>
+        ))}
+      </select>
             </div>
           </div>
 

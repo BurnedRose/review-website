@@ -3,7 +3,6 @@ import { useEffect, useState, useCallback } from "react";
 import { 
   FaSearch, FaTag, FaTimes, FaStar, 
   FaSort, FaEye, FaThumbsUp, FaChartBar,
-  FaUser
 } from "react-icons/fa";
 import Header from '../all_review/header';
 
@@ -204,8 +203,8 @@ export default function blogPage() {
     if (!selectedReview || !isModalOpen) return null;
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 overflow-y-auto">
-        <div className="bg-[#f8f4eb] rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-xl my-8">
+      <div className="fixed inset-0 bg-[rgba(248,244,235,0.7)] flex items-center justify-center z-50 p-4 overflow-y-auto">
+        <div className="bg-white   rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-xl my-8">
           <div className="sticky top-0 bg-[#2b5d4a] text-[#f8f4eb] rounded-t-lg p-4 z-10">
             <div className="flex justify-between items-center">
               <h2 className="text-xl md:text-2xl font-bold truncate">{selectedReview.title}</h2>
@@ -215,7 +214,7 @@ export default function blogPage() {
             </div>
           </div>
           
-          <div className="p-4 md:p-6">
+          <div className="p-4 md:p-6" >
             {/* Author info with avatar - passing the whole review object */}
             <div className="flex items-center mb-4">
               <ProfileAvatar review={selectedReview} size="lg" />
@@ -244,7 +243,7 @@ export default function blogPage() {
             </div>
             
             {/* Engagement stats */}
-            <div className="bg-[#f1ede3] p-3 rounded-lg mb-4">
+            <div className="bg-white p-3 rounded-lg mb-4">
               <h3 className="text-sm font-medium text-[#2b5d4a] mb-2">Engagement</h3>
               <div className="flex gap-4">
                 <div className="flex items-center">
@@ -266,7 +265,7 @@ export default function blogPage() {
             </div>
           </div>
           
-          <div className="sticky bottom-0 bg-[#e5e1d8] bg-opacity-40 px-4 md:px-6 py-4 rounded-b-lg shadow-inner">
+          <div className="sticky bottom-0 bg-white bg-opacity-40 px-4 md:px-6 py-4 rounded-b-lg shadow-inner">
             <div className="grid grid-cols-2 gap-2">
               <button 
                 onClick={(e) => handleLikeReview(selectedReview._id, e)}
@@ -360,7 +359,10 @@ export default function blogPage() {
                   <FaSort className="text-[#f8f4eb]" />
                 </div>
                 <select
-                  className="pl-10 pr-4 py-3 w-full border border-[#2b5d4a] rounded-lg bg-[#2b5d4a] text-[#f8f4eb] focus:ring-2 focus:ring-[#7ea566] focus:border-[#7ea566]"
+                  className="pl-10 pr-10 py-3 w-full h-12 text-base rounded-lg bg-[#2b5d4a] text-[#f8f4eb] 
+                  border border-[#2b5d4a] hover:border-[#7ea566]
+                  focus:ring-2 focus:ring-[#7ea566] focus:outline-none
+                  transition duration-150 appearance-none"
                   value={sortOption}
                   onChange={handleSortChange}
                 >
