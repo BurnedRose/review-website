@@ -199,6 +199,7 @@ export default function blogPage() {
     );
   };
 
+
   const ReviewModal = () => {
     if (!selectedReview || !isModalOpen) return null;
 
@@ -214,7 +215,7 @@ export default function blogPage() {
             </div>
           </div>
           
-          <div className="p-4 md:p-6" >
+          <div className="p-4 md:p-6">
             {/* Author info with avatar - passing the whole review object */}
             <div className="flex items-center mb-4">
               <ProfileAvatar review={selectedReview} size="lg" />
@@ -286,10 +287,12 @@ export default function blogPage() {
     );
   };
 
+
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-[#f8f4eb]">
+      <div className="min-h-screen bg-[#f8f4eb] relative" >
+      
         <div className="max-w-6xl mx-auto px-4 py-6 md:p-6">
           <header className="mb-6 md:mb-8">
             <h1 className="text-2xl md:text-3xl font-bold text-[#2b5d4a] text-center mb-2">All Reviews</h1>
