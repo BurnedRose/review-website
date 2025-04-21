@@ -6,7 +6,7 @@ import {
 } from "react-icons/fa";
 import Header from '../all_review/header';
 
-export default function blogPage() {
+export default function BlogPage() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,6 +15,8 @@ export default function blogPage() {
   const [sortOption, setSortOption] = useState("highest");
   const [starFilter, setStarFilter] = useState(0);
   const [filteredReviews, setFilteredReviews] = useState([]);
+  // Add pagination state
+  const [visibleCount, setVisibleCount] = useState(9);
 
   // Filter and sort reviews
   const getFilteredAndSortedReviews = useCallback(() => {
@@ -43,6 +45,8 @@ export default function blogPage() {
   // Update filtered reviews when dependencies change
   useEffect(() => {
     setFilteredReviews(getFilteredAndSortedReviews());
+    // Reset visible count when filters change
+    setVisibleCount(9);
   }, [reviews, searchTerm, starFilter, sortOption, getFilteredAndSortedReviews]);
 
   // Calculate rating distribution for chart
@@ -92,6 +96,11 @@ export default function blogPage() {
   // Handler for changing sort option
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
+  };
+
+  // Handle load more button click
+  const handleLoadMore = () => {
+    setVisibleCount(prevCount => prevCount + 9);
   };
 
   function renderStars(count) {
@@ -148,49 +157,39 @@ export default function blogPage() {
   };
 
   const ProfileAvatar = ({ review, size = "md" }) => {
-    // Use the MongoDB schema field names directly
     const author = review?.author || "?";
     const profileImage = review?.authorImg || null;
-    
-    // Generate a consistent color based on author name if needed
+  
+    const [imageError, setImageError] = useState(false);
+  
     const bgColor = getRandomProfileColor(author);
-    
-    // Get initials for text display
     const initials = author?.charAt(0) || "?";
-    
-    // Size classes for different avatar sizes
+  
     const sizeClass = {
       sm: "w-8 h-8 text-sm",
-      md: "w-10 h-10 text-base", 
-      lg: "w-12 h-12 text-lg"
+      md: "w-10 h-10 text-base",
+      lg: "w-12 h-12 text-lg",
     }[size];
-    
-    // If profile image exists, render image avatar
-    if (profileImage) {
+  
+    const handleError = () => {
+      setImageError(true);
+    };
+  
+    if (profileImage && !imageError) {
       return (
         <div className={`${sizeClass} rounded-full overflow-hidden flex-shrink-0`}>
-          <img 
-            src={profileImage} 
+          <img
+            src={profileImage}
             alt={`${author}'s profile`}
             className="w-full h-full object-cover"
-            onError={(e) => {
-              // Fallback to initials on image load error
-              e.target.style.display = 'none';
-              e.target.parentNode.classList.add('flex', 'items-center', 'justify-center');
-              e.target.parentNode.style.backgroundColor = bgColor;
-              const textElement = document.createElement('span');
-              textElement.className = 'text-white font-semibold';
-              textElement.textContent = initials.toUpperCase();
-              e.target.parentNode.appendChild(textElement);
-            }}
+            onError={handleError}
           />
         </div>
       );
     }
-    
-    // Otherwise render initials avatar
+  
     return (
-      <div 
+      <div
         className={`${sizeClass} rounded-full flex items-center justify-center text-white font-semibold flex-shrink-0`}
         style={{ backgroundColor: bgColor }}
       >
@@ -437,7 +436,8 @@ export default function blogPage() {
             </div>
           ) : (
             <div className="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-              {filteredReviews.map((review) => {
+              {/* Only show the number of reviews based on visibleCount */}
+              {filteredReviews.slice(0, visibleCount).map((review) => {
                 const maxLength = 100;
                 const shortDesc = review.description?.length > maxLength
                   ? `${review.description.substring(0, maxLength)}...`
@@ -494,9 +494,12 @@ export default function blogPage() {
           )}
           
           {/* Pagination - Only show when needed */}
-          {filteredReviews.length > 0 && (
+          {filteredReviews.length > 0 && visibleCount < filteredReviews.length && (
             <div className="mt-8 flex justify-center">
-              <button className="px-4 py-2 bg-[#2b5d4a] text-white rounded-md hover:bg-[#1a4535] disabled:opacity-50 disabled:cursor-not-allowed">
+              <button 
+                className="px-4 py-2 bg-[#2b5d4a] text-white rounded-md hover:bg-[#1a4535]"
+                onClick={handleLoadMore}
+              >
                 Load More
               </button>
             </div>
