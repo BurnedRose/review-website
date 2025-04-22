@@ -23,7 +23,6 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate network request
     setTimeout(() => {
       const userExists = users.find(
         (user) => user.email === email && user.password === password
@@ -50,7 +49,7 @@ export default function LoginPage() {
           <div className="relative bg-gradient-to-br from-[#8aba74] to-[#6b9654] rounded-2xl shadow-2xl overflow-hidden backdrop-blur-lg">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-black opacity-10 rounded-full -ml-12 -mb-12"></div>
-
+            
             <div className="px-8 pt-8 pb-4 text-center relative z-10">
               <div className="flex justify-center mb-5">
                 <div className="bg-white p-3 rounded-full shadow-lg">
@@ -65,7 +64,7 @@ export default function LoginPage() {
               <h2 className="text-3xl font-bold text-white">Welcome</h2>
               <p className="text-white mt-2 opacity-90">Please Enter Your Login Details</p>
             </div>
-
+            
             <div className="px-8 py-6 relative z-10">
               {errorMessage && (
                 <div className="mb-6 bg-red-500 bg-opacity-20 border-l-4 border-red-500 p-4 rounded-lg">
@@ -142,14 +141,13 @@ export default function LoginPage() {
                   )}
                 </button>
               </form>
-
+              
               <div className="relative w-full my-6">
                 <div className="flex items-center w-full">
                   <div className="flex-grow border-t border-white border-opacity-30"></div>
                   <span className="px-4 text-white text-sm font-medium">Or</span>
                   <div className="flex-grow border-t border-white border-opacity-30"></div>
                 </div>
-
                 <div className="mt-6">
                   <button
                     onClick={() => router.push("/account")}
@@ -168,7 +166,7 @@ export default function LoginPage() {
                 </div>
               </div>
             </div>
-
+            
             <div className="px-8 py-5 text-center border-t border-white border-opacity-20 bg-black bg-opacity-10">
               <p className="text-sm text-white">
                 New here?{" "}
