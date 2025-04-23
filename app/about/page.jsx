@@ -193,7 +193,7 @@ const AboutPage = () => {
 
             {/* ปิด captcha และ redirect หลังส่ง */}
             <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_next" value="/https://yourdomain.com/thank-you" />
+            <input type="hidden" name="_next" value="/http://localhost:3000" />
 
             <button 
               type="submit" 

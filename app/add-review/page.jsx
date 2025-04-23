@@ -1,8 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
-  FaStar, FaPen, FaList, FaUser, FaCalendarAlt, FaTags, FaCheckCircle, FaTimes
+  FaStar, FaPen, FaList, FaUser, FaCalendarAlt, FaTags, FaCheckCircle, FaTimes, FaShieldAlt
 } from "react-icons/fa";
 
 export default function AddReviewPage() {
@@ -21,6 +21,29 @@ export default function AddReviewPage() {
   const [statusType, setStatusType] = useState("");
   const [hoverRating, setHoverRating] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitCount, setSubmitCount] = useState(0);
+  const [lastSubmitTime, setLastSubmitTime] = useState(null);
+  const [captchaVerified, setCaptchaVerified] = useState(false);
+  const [submissionBlocked, setSubmissionBlocked] = useState(false);
+
+  // โหลดข้อมูลการส่งล่าสุดจาก localStorage (ป้องกันการรีเฟรชเพื่อหลีกเลี่ยงการตรวจสอบ)
+  useEffect(() => {
+    const storedSubmitData = localStorage.getItem('reviewSubmitData');
+    if (storedSubmitData) {
+      const { count, lastTime } = JSON.parse(storedSubmitData);
+      setSubmitCount(count);
+      setLastSubmitTime(lastTime);
+      
+      // ตรวจสอบว่าควรบล็อกการส่งหรือไม่ (ถ้าส่งมากกว่า 3 ครั้งในช่วง 1 ชั่วโมง)
+      const oneHourAgo = Date.now() - (60 * 60 * 1000);
+      if (count >= 3 && lastTime && lastTime > oneHourAgo) {
+        setSubmissionBlocked(true);
+        const remainingTime = Math.ceil((lastTime + (60 * 60 * 1000) - Date.now()) / 60000);
+        setStatus(`You've submitted too many reviews recently. Please try again in approximately ${remainingTime} minutes.`);
+        setStatusType("error");
+      }
+    }
+  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -32,13 +55,154 @@ export default function AddReviewPage() {
     if (status && statusType === "error") setStatus(null);
   };
 
+  // ฟังก์ชันตรวจสอบคำหยาบคายหรือเนื้อหาที่ไม่เหมาะสม (เบื้องต้น)
+  const containsInappropriateContent = (text) => {
+    // คำที่ไม่เหมาะสม (ตัวอย่าง - ควรขยายตามความเหมาะสม)
+    const inappropriateWords = ['badword1', 'badword2', 'spam', 'scam'];
+    
+    if (!text) return false;
+    
+    const lowerText = text.toLowerCase();
+    return inappropriateWords.some(word => lowerText.includes(word));
+  };
+
+  // ตรวจสอบการส่งอย่างรวดเร็วเกินไป
+  const isSubmittingTooQuickly = () => {
+    if (!lastSubmitTime) return false;
+    
+    // ต้องการให้มีช่วงห่างอย่างน้อย 30 วินาทีระหว่างการส่งแต่ละครั้ง
+    const minimumInterval = 30 * 1000; // 30 วินาที
+    const timeSinceLastSubmit = Date.now() - lastSubmitTime;
+    
+    return timeSinceLastSubmit < minimumInterval;
+  };
+
+  // ตรวจสอบการส่งซ้ำ (เช็คที่ frontend ก่อน)
+  const isPotentialDuplicate = () => {
+    // เช็คจาก localStorage (ตัวอย่าง - ควรใช้วิธีที่ปลอดภัยกว่าในการใช้งานจริง)
+    const previousSubmissions = localStorage.getItem('previousReviews');
+    
+    if (!previousSubmissions) return false;
+    
+    const submissions = JSON.parse(previousSubmissions);
+    
+    // เช็คว่ามีการส่งที่คล้ายกันหรือไม่
+    return submissions.some(submission => {
+      // เปรียบเทียบเนื้อหาคร่าวๆ
+      const titleMatch = submission.title === form.title;
+      const authorMatch = submission.author === form.author;
+      const descriptionSimilarity = isTextSimilar(submission.description, form.description);
+      
+      // ถ้าทั้งชื่อและผู้เขียนตรงกัน หรือ เนื้อหาคล้ายกันมาก
+      return (titleMatch && authorMatch) || descriptionSimilarity;
+    });
+  };
+
+  // ฟังก์ชันช่วยตรวจสอบความคล้ายคลึงของข้อความ (เบื้องต้น)
+  const isTextSimilar = (text1, text2) => {
+    if (!text1 || !text2) return false;
+    
+    // ลดรูปข้อความเพื่อเปรียบเทียบ
+    const normalize = (text) => text.toLowerCase().replace(/\s+/g, ' ').trim();
+    
+    const normalizedText1 = normalize(text1);
+    const normalizedText2 = normalize(text2);
+    
+    // ถ้าความยาวต่างกันมาก คงไม่คล้ายกัน
+    if (Math.abs(normalizedText1.length - normalizedText2.length) > normalizedText1.length * 0.3) {
+      return false;
+    }
+    
+    // ตรวจสอบง่ายๆ (ในทางปฏิบัติควรใช้อัลกอริทึมเช่น Levenshtein distance)
+    const isSimilar = normalizedText1 === normalizedText2 || 
+                   normalizedText1.includes(normalizedText2) || 
+                   normalizedText2.includes(normalizedText1);
+                   
+    return isSimilar;
+  };
+
+  // สมมติฟังก์ชันตรวจสอบ CAPTCHA (ในการใช้งานจริงควรใช้ reCAPTCHA หรือบริการอื่น)
+  const simulateCaptchaVerification = () => {
+    setCaptchaVerified(true);
+  };
+
+  const saveSubmissionData = () => {
+    // เพิ่มจำนวนการส่งและบันทึกเวลาล่าสุด
+    const newCount = submitCount + 1;
+    const currentTime = Date.now();
+    
+    setSubmitCount(newCount);
+    setLastSubmitTime(currentTime);
+    
+    // บันทึกลงใน localStorage
+    localStorage.setItem('reviewSubmitData', JSON.stringify({
+      count: newCount,
+      lastTime: currentTime
+    }));
+    
+    // บันทึกรีวิวปัจจุบันเพื่อใช้ในการตรวจสอบการซ้ำ
+    const previousSubmissions = localStorage.getItem('previousReviews');
+    const submissions = previousSubmissions ? JSON.parse(previousSubmissions) : [];
+    
+    submissions.push({
+      title: form.title,
+      author: form.author,
+      description: form.description
+    });
+    
+    // เก็บเฉพาะ 10 รายการล่าสุด
+    if (submissions.length > 10) submissions.shift();
+    
+    localStorage.setItem('previousReviews', JSON.stringify(submissions));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // ตรวจสอบว่าถูกบล็อกการส่งหรือไม่
+    if (submissionBlocked) {
+      setStatus("You've submitted too many reviews recently. Please try again later.");
+      setStatusType("error");
+      return;
+    }
+    
+    // ตรวจสอบการให้คะแนน
     if (!form.rating) {
       setStatus("Please provide a rating before submitting.");
       setStatusType("error");
       return;
     }
+    
+    // ตรวจสอบเนื้อหาที่ไม่เหมาะสม
+    if (containsInappropriateContent(form.title) || containsInappropriateContent(form.description)) {
+      setStatus("Your review contains inappropriate content. Please revise and try again.");
+      setStatusType("error");
+      return;
+    }
+    
+    // ตรวจสอบการส่งเร็วเกินไป
+    if (isSubmittingTooQuickly()) {
+      setStatus("You're submitting too quickly. Please wait a moment before trying again.");
+      setStatusType("error");
+      return;
+    }
+    
+    // ตรวจสอบการส่งซ้ำ
+    if (isPotentialDuplicate()) {
+      setStatus("This appears to be a duplicate review. Please submit unique content.");
+      setStatusType("error");
+      return;
+    }
+    
+    // เพิ่มการตรวจสอบ CAPTCHA หากมีการส่งมากกว่า 2 ครั้ง
+    if (submitCount >= 2 && !captchaVerified) {
+      setStatus("Please verify you are not a robot before submitting.");
+      setStatusType("error");
+      // แสดง CAPTCHA (ในตัวอย่างนี้แค่จำลอง)
+      simulateCaptchaVerification(); // ในกรณีจริงจะเป็นการแสดง CAPTCHA UI
+      return;
+    }
+    
     setIsSubmitting(true);
     const formDataToSend = {
       ...form,
@@ -51,12 +215,19 @@ export default function AddReviewPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formDataToSend),
       });
+      
       const data = await res.json();
+      
       if (data.success) {
+        // บันทึกข้อมูลการส่ง
+        saveSubmissionData();
+        
         setStatus("Review submitted successfully!");
         setStatusType("success");
         setForm({ title: "", description: "", category: "", author: "", date: "", rating: 0, authorImg: "" });
         setHoverRating(0);
+        setCaptchaVerified(false);
+        
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(() => {
           setStatus(null);
@@ -95,8 +266,33 @@ export default function AddReviewPage() {
     </div>
   );
 
+  // สมมติการแสดง CAPTCHA (ในการใช้งานจริงจะใช้ reCAPTCHA หรือ hCaptcha)
+  const renderCaptcha = () => {
+    if (submitCount < 2 || captchaVerified) return null;
+    
+    return (
+      <div className="mb-4 p-4 border border-[#d5e8db] rounded bg-[#f0f8f2]">
+        <div className="flex items-center mb-2">
+          <FaShieldAlt className="text-[#8cb76b] mr-2" />
+          <span className="text-sm font-medium text-[#2b5d4a]">Verify you're human</span>
+        </div>
+        <button 
+          onClick={simulateCaptchaVerification}
+          className="bg-[#8cb76b] text-white px-4 py-2 rounded text-sm"
+        >
+          Click to verify
+        </button>
+        {captchaVerified && (
+          <div className="mt-2 text-sm text-[#2b5d4a] flex items-center">
+            <FaCheckCircle className="text-[#4d7a5a] mr-2" /> Verification successful
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const categories = ["Study", "Environment", "Experience", "Other"];
-  const isSubmitDisabled = !form.rating || !form.title || !form.description || !form.author || !form.date || !form.category;
+  const isSubmitDisabled = !form.rating || !form.title || !form.description || !form.author || !form.date || !form.category || submissionBlocked || (submitCount >= 2 && !captchaVerified);
   const inputClasses = "w-full border border-[#c5dbce] rounded px-3 py-2.5 bg-white bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-[#8cb76b] text-[#2b5d4a] placeholder-[#88a696]";
 
   return (
@@ -166,6 +362,9 @@ export default function AddReviewPage() {
               </div>
             </div>
           </div>
+
+          {/* แสดง CAPTCHA หากจำเป็น */}
+          {renderCaptcha()}
 
           <button
             type="submit"
