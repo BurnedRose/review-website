@@ -27,7 +27,6 @@ export async function POST(request) {
     const imgUrl = `/${timestamp}_${image.name}`;
 */
 
-
     const ReviewData = {
         title:`${formData.get('title')}`,
         description:`${formData.get('description')}`,
