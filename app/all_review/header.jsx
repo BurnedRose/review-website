@@ -21,14 +21,14 @@ const Header = () => {
 
         {/* MENU */}
         <div className="hidden md:flex space-x-10 font-semibold text-lg">
-          <a href="/" className="hover:underline">Home</a>
-          <a href="/all_review" className="hover:underline">Blog</a>
-          <a href="#" className="hover:underline">About</a>
+          <a href="/all_review" className="hover:underline">Home</a>
+          <a href="/blog" className="hover:underline">Blog</a>
+          <a href="/about" className="hover:underline">About</a>
         </div>
 
         {/* SIGNUP/LOGIN BUTTON */}
-        <Link href="/login" className="bg-white text-green-800 text-sm font-semibold px-4 py-2 rounded-full shadow-md hover:bg-gray-100">
-        Signup/Login
+        <Link href="/" className="bg-white text-green-800 text-sm font-semibold px-4 py-2 rounded-full shadow-md hover:bg-gray-100">
+        Logout
         </Link>
       </div>
     </div>

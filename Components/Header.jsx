@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
-import { assets } from "@/Assets/assets";
 import Link from 'next/link';
+import { assets } from "@/Assets/assets";
 
 const Header = () => {
   return (
@@ -17,13 +17,6 @@ const Header = () => {
             height={60}
             className="h-[60px] w-auto" 
           />
-        </div>
-
-        {/* MENU */}
-        <div className="hidden md:flex space-x-10 font-semibold text-lg">
-          <a href="#" className="hover:underline">Home</a>
-          <a href="#" className="hover:underline">Blog</a>
-          <a href="#" className="hover:underline">About</a>
         </div>
 
         {/* SIGNUP/LOGIN BUTTON */}

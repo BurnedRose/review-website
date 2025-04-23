@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import Footer from '@/Components/homepage/Footer';
+import Footer from '@/Components/Footer';
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
