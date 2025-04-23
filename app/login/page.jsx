@@ -16,6 +16,7 @@ export default function LoginPage() {
   const users = [
     { email: "eki@gmail.com", password: "eki0000" },
     { email: "test@example.com", password: "password123" },
+    { email: "yuki@gmail.com", password: "yuki_2025" },
     { email: "G2BZC@gmail.com", password: "admin123" },
   ];
 

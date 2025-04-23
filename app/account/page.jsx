@@ -110,7 +110,7 @@ export default function AccountPage() {
             <div className="w-full lg:w-1/3 mt-6 lg:mt-0">
               <h2 className="text-lg sm:text-xl font-bold text-[#3a6959] mb-4 sm:mb-6">Quick Links</h2>
               <div className="space-y-3 sm:space-y-4">
-                <Link href="/my-work">
+                <Link href="/all_review">
                   <div className="flex items-center p-3 sm:p-4 bg-[#f4f2ec] hover:bg-[#e5e1d8] rounded-xl transition duration-300 shadow-sm border border-[#e5e1d8]">
                     <div className="p-2 sm:p-3 rounded-full bg-[#8fb277] text-white mr-3 sm:mr-4">
                       <FaRegUser size={16} className="sm:hidden" />
