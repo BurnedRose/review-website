@@ -22,7 +22,11 @@ export default function BlogPage() {
   const getFilteredAndSortedReviews = useCallback(() => {
     // Filter by search term and exact star rating
     let results = reviews.filter(review =>
-      review.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (
+        review.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        review.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        review.author?.toLowerCase().includes(searchTerm.toLowerCase())
+      ) &&
       (starFilter === 0 || review.rating === starFilter)
     );
     

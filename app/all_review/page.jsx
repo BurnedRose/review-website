@@ -15,7 +15,11 @@ export default function AllReviewPage() {
   const categories = [...new Set(reviews.map(review => review.category))];
 
   const filteredReviews = reviews.filter(review =>
-    review.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (
+      review.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      review.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      review.author.toLowerCase().includes(searchTerm.toLowerCase())
+    ) &&
     (filterCategory === "" || review.category === filterCategory)
   );
 
