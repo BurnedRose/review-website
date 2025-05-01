@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { Pagination, Autoplay } from 'swiper/modules';
 import { FaStar } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
@@ -145,7 +145,6 @@ const TestimonialSection = () => {
         margin-top: 30px;
       }
 
-      /* เพิ่มสองส่วนนี้ */
       .swiper-pagination-bullet {
       background-color: #9CA3AF; /* สีเทา */
       opacity: 1;
@@ -155,8 +154,7 @@ const TestimonialSection = () => {
       background-color: #007a47 !important; /* สีเขียวตาม brand */
       opacity: 1 !important;
      }
-        /* จบส่วนที่เพิ่ม */
-
+       
       .swiper-slide-active {
       z-index: 10;
      }
