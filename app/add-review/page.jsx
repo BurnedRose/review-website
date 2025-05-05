@@ -35,7 +35,7 @@ export default function AddReviewPage() {
       setLastSubmitTime(lastTime);
       
       // ตรวจสอบว่าควรบล็อกการส่งหรือไม่ (ถ้าส่งมากกว่า 3 ครั้งในช่วง 1 ชั่วโมง)
-      const oneHourAgo = Date.now() - (60 * 60 * 1000);
+      const oneHourAgo = Date.now() - (6 * 6 * 1000);
       if (count >= 3 && lastTime && lastTime > oneHourAgo) {
         setSubmissionBlocked(true);
         const remainingTime = Math.ceil((lastTime + (60 * 60 * 1000) - Date.now()) / 60000);
@@ -210,39 +210,36 @@ export default function AddReviewPage() {
     };
 
     try {
-      const res = await fetch("/api/review", {
+      const res = await fetch("http://localhost:8080/api/reviews/addreview", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formDataToSend),
       });
-      
-      const data = await res.json();
-      
-      if (data.success) {
-        // บันทึกข้อมูลการส่ง
+    
+      const data = await res.json().catch(() => null);
+    
+      if (data?.success) {
         saveSubmissionData();
-        
         setStatus("Review submitted successfully!");
         setStatusType("success");
         setForm({ title: "", description: "", category: "", author: "", date: "", rating: 0, authorImg: "" });
         setHoverRating(0);
         setCaptchaVerified(false);
-        
+    
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    
         setTimeout(() => {
           setStatus(null);
           router.push("/all_review");
         }, 1500);
       } else {
-        setStatus(data.message || "Submission failed. Try again.");
+        setStatus(data?.message || "Submission failed. Try again.");
         setStatusType("error");
       }
     } catch (error) {
       console.error(error);
       setStatus("Submission failed. Try again.");
       setStatusType("error");
-    } finally {
-      setIsSubmitting(false);
     }
   };
 

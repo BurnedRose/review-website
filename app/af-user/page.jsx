@@ -164,7 +164,7 @@ export default function UserPage() {
   </div>
 </Link>
                 
-                <Link href="/blog">
+                <Link href="/all_review">
                   <div className="flex items-center p-3 sm:p-4 bg-[#f4f2ec] hover:bg-[#e5e1d8] rounded-xl transition duration-300 shadow-sm border border-[#e5e1d8]">
                     <div className="p-2 sm:p-3 rounded-full bg-[#8fb277] text-white mr-3 sm:mr-4">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">
