@@ -35,7 +35,7 @@ export default function AddReviewPage() {
       setLastSubmitTime(lastTime);
       
       // ตรวจสอบว่าควรบล็อกการส่งหรือไม่ (ถ้าส่งมากกว่า 3 ครั้งในช่วง 1 ชั่วโมง)
-      const oneHourAgo = Date.now() - (6 * 6 * 1000);
+      const oneHourAgo = Date.now() - (60 * 60 * 1000);
       if (count >= 3 && lastTime && lastTime > oneHourAgo) {
         setSubmissionBlocked(true);
         const remainingTime = Math.ceil((lastTime + (60 * 60 * 1000) - Date.now()) / 60000);
