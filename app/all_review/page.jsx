@@ -11,34 +11,74 @@ export default function AllReviewPage() {
   const [filterCategory, setFilterCategory] = useState("");
   const [selectedReview, setSelectedReview] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const uniqueCategories = [...new Set(categories.map(cat => cat.category))];
 
-  const categories = [...new Set(reviews.map(review => review.category))];
+  // ฟังก์ชันสำหรับดึงข้อมูลรีวิวทั้งหมด
+  const fetchAllReviews = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("http://localhost:8080/api/reviews/all_review");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setReviews(data);
+    } catch (error) {
+      console.error("Error fetching all reviews:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const filteredReviews = reviews.filter(review =>
-    (
-      review.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      review.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      review.author.toLowerCase().includes(searchTerm.toLowerCase())
-    ) &&
-    (filterCategory === "" || review.category === filterCategory)
-  );
+  // ฟังก์ชันสำหรับดึงข้อมูลรีวิวที่กรองตาม searchTerm และ filterCategory
+  const fetchFilteredReviews = async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (searchTerm) params.append("searchTerm", searchTerm);
+      if (filterCategory) params.append("category", filterCategory);
+      
+      const response = await fetch(`http://localhost:8080/api/reviews/filtered?${params}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setReviews(data);
+    } catch (error) {
+      console.error("Error fetching filtered reviews:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/reviews/categories");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setCategories(data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const res = await fetch("http://localhost:8080/api/reviews/all_review");
-        const data = await res.json();
-        setReviews(data);
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    fetchReviews();
+    fetchCategories();
+    fetchAllReviews();  // ดึงข้อมูลรีวิวทั้งหมดเมื่อหน้าโหลด
   }, []);
 
+  useEffect(() => {
+    const debounceTimeout = setTimeout(() => {
+      fetchFilteredReviews();  // ดึงข้อมูลรีวิวที่กรองตามเงื่อนไข searchTerm และ filterCategory
+    }, 500);
+
+    return () => {
+      clearTimeout(debounceTimeout);
+    };
+  }, [searchTerm, filterCategory]);
   function renderStars(count, reviewId) {
     return (
       <div className="flex space-x-1">
@@ -107,7 +147,7 @@ export default function AllReviewPage() {
     );
   };
 
-  const insightFilteredReviews = filteredReviews;
+  const insightFilteredReviews = reviews;
 
   return (
     <>
@@ -146,10 +186,10 @@ export default function AllReviewPage() {
                 aria-label="Filter by category"
               >
                 <option value="">All Categories</option>
-                {categories.map((category) => (
-                  <option key={`category-${category}`} value={category}>
-                    {category}
-                  </option>
+                {uniqueCategories.map((category) => (
+                <option key={`category-${category}`} value={category}>
+                {category}
+                </option>
                 ))}
               </select>
             </div>
