@@ -210,39 +210,36 @@ export default function AddReviewPage() {
     };
 
     try {
-      const res = await fetch("/api/review", {
+      const res = await fetch("http://localhost:8080/api/reviews/addreview", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formDataToSend),
       });
-      
-      const data = await res.json();
-      
-      if (data.success) {
-        // บันทึกข้อมูลการส่ง
+    
+      const data = await res.json().catch(() => null);
+    
+      if (data?.success) {
         saveSubmissionData();
-        
         setStatus("Review submitted successfully!");
         setStatusType("success");
         setForm({ title: "", description: "", category: "", author: "", date: "", rating: 0, authorImg: "" });
         setHoverRating(0);
         setCaptchaVerified(false);
-        
+    
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    
         setTimeout(() => {
           setStatus(null);
           router.push("/all_review");
         }, 1500);
       } else {
-        setStatus(data.message || "Submission failed. Try again.");
+        setStatus(data?.message || "Submission failed. Try again.");
         setStatusType("error");
       }
     } catch (error) {
       console.error(error);
       setStatus("Submission failed. Try again.");
       setStatusType("error");
-    } finally {
-      setIsSubmitting(false);
     }
   };
 

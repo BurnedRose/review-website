@@ -178,22 +178,31 @@ const AboutPage = () => {
             className="grid gap-4"
           >
             <input 
-              type="text" 
-              name="name" 
-              required 
-              placeholder="ชื่อของคุณ" 
-              className="p-3 rounded-md bg-white text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#a5d6a7]"
-            />
-            <textarea 
-              name="message" 
-              required 
-              placeholder="ข้อความของคุณ" 
-              className="p-3 rounded-md bg-white text-black h-32 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#a5d6a7]"
-            ></textarea>
+            type="text" 
+            name="name" 
+            required 
+            placeholder="ชื่อของคุณ" 
+            className="p-3 rounded-md bg-white text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#a5d6a7]"
+          />
+
+          <input 
+          type="email" 
+          name="email" 
+          required 
+          placeholder="อีเมลของคุณ" 
+          className="p-3 rounded-md bg-white text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#a5d6a7]"
+          />
+
+          <textarea 
+          name="message" 
+          required 
+          placeholder="ข้อความของคุณ" 
+          className="p-3 rounded-md bg-white text-black h-32 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#a5d6a7]"
+          ></textarea>
 
             {/* ปิด captcha และ redirect หลังส่ง */}
             <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_next" value="/http://localhost:3000" />
+            <input type="hidden" name="_next" value="http://localhost:3000/thankyou" />
 
             <button 
               type="submit" 
@@ -222,7 +231,7 @@ const AboutPage = () => {
       {/* Footer */}
       <footer className="bg-[#4a4a4a] text-[#f8f5f0] py-4 text-center text-sm font-[Prompt]">
         <div className="container mx-auto">
-          <p>© {new Date().getFullYear()} UTCC ComSci Review. โครงงานวิชาพัฒนาเว็บ.</p>
+          <p>© {new Date().getFullYear()} UTCC ComSci Reviews. All rights reserved.</p>
         </div>
       </footer>
     </>

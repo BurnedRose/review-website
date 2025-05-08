@@ -22,7 +22,11 @@ export default function BlogPage() {
   const getFilteredAndSortedReviews = useCallback(() => {
     // Filter by search term and exact star rating
     let results = reviews.filter(review =>
-      review.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (
+        review.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        review.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        review.author?.toLowerCase().includes(searchTerm.toLowerCase())
+      ) &&
       (starFilter === 0 || review.rating === starFilter)
     );
     
@@ -158,35 +162,15 @@ export default function BlogPage() {
 
   const ProfileAvatar = ({ review, size = "md" }) => {
     const author = review?.author || "?";
-    const profileImage = review?.authorImg || null;
-  
-    const [imageError, setImageError] = useState(false);
+    const initials = author?.charAt(0) || "?";
   
     const bgColor = getRandomProfileColor(author);
-    const initials = author?.charAt(0) || "?";
   
     const sizeClass = {
       sm: "w-8 h-8 text-sm",
       md: "w-10 h-10 text-base",
       lg: "w-12 h-12 text-lg",
     }[size];
-  
-    const handleError = () => {
-      setImageError(true);
-    };
-  
-    if (profileImage && !imageError) {
-      return (
-        <div className={`${sizeClass} rounded-full overflow-hidden flex-shrink-0`}>
-          <img
-            src={profileImage}
-            alt={`${author}'s profile`}
-            className="w-full h-full object-cover"
-            onError={handleError}
-          />
-        </div>
-      );
-    }
   
     return (
       <div

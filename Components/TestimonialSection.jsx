@@ -55,7 +55,7 @@ class TestimonialSection extends React.Component {
 
 import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { Pagination, Autoplay } from 'swiper/modules';
 import { FaStar } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
@@ -147,13 +147,13 @@ const TestimonialSection = () => {
       </h2>
 
       <div className="px-4 max-w-6xl mx-auto relative">
-        <Swiper
-          modules={[Pagination, Autoplay]}
-          pagination={{
-            clickable: true,
-            bulletActiveClass: 'bg-[#007a47] opacity-100',
-            bulletClass: 'inline-block w-2 h-2 rounded-full bg-green-700 mx-1 cursor-pointer transition-all duration-300 hover:scale-125',
-          }}
+      <Swiper
+  modules={[Pagination, Autoplay]}
+  pagination={{
+    clickable: true,
+    bulletActiveClass: 'swiper-pagination-bullet-active bg-[#007a47] !opacity-100',
+    bulletClass: 'swiper-pagination-bullet inline-block w-2 h-2 rounded-full bg-gray-400 mx-1 cursor-pointer transition-all duration-300 hover:scale-125',
+  }}
           autoplay={{
             delay: 4000,
             disableOnInteraction: false,
@@ -193,19 +193,29 @@ const TestimonialSection = () => {
 
       <style jsx global>{`
         .testimonial-swiper .swiper-pagination {
-          position: relative;
-          bottom: -10px;
-          margin-top: 30px;
-        }
+        position: relative;
+        bottom: -10px;
+        margin-top: 30px;
+      }
 
-        .swiper-slide-active {
-          z-index: 10;
-        }
+      .swiper-pagination-bullet {
+      background-color: #9CA3AF; /* สีเทา */
+      opacity: 1;
+      }
 
-        .swiper-button-prev, .swiper-button-next {
-          transform: translateY(-50%);
-        }
-      `}</style>
+      .swiper-pagination-bullet-active {
+      background-color: #007a47 !important; /* สีเขียวตาม brand */
+      opacity: 1 !important;
+     }
+       
+      .swiper-slide-active {
+      z-index: 10;
+     }
+
+      .swiper-button-prev, .swiper-button-next {
+      transform: translateY(-50%);
+     }
+  `}</style>
     </div>
   );
 };

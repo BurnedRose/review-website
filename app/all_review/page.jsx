@@ -11,39 +11,80 @@ export default function AllReviewPage() {
   const [filterCategory, setFilterCategory] = useState("");
   const [selectedReview, setSelectedReview] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const uniqueCategories = [...new Set(categories.map(cat => cat.category))];
 
-  const categories = [...new Set(reviews.map(review => review.category))];
+  // ฟังก์ชันสำหรับดึงข้อมูลรีวิวทั้งหมด
+  const fetchAllReviews = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("http://localhost:8080/api/reviews/all_review");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setReviews(data);
+    } catch (error) {
+      console.error("Error fetching all reviews:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const filteredReviews = reviews.filter(review =>
-    review.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (filterCategory === "" || review.category === filterCategory)
-  );
+  // ฟังก์ชันสำหรับดึงข้อมูลรีวิวที่กรองตาม searchTerm และ filterCategory
+  const fetchFilteredReviews = async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (searchTerm) params.append("searchTerm", searchTerm);
+      if (filterCategory) params.append("category", filterCategory);
+      
+      const response = await fetch(`http://localhost:8080/api/reviews/filtered?${params}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setReviews(data);
+    } catch (error) {
+      console.error("Error fetching filtered reviews:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/reviews/categories");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setCategories(data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const res = await fetch("/api/review");
-        const data = await res.json();
-        if (data.success) {
-          setReviews(data.reviews);
-        } else {
-          console.error("Failed to fetch reviews");
-        }
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchReviews();
+    fetchCategories();
+    fetchAllReviews();  // ดึงข้อมูลรีวิวทั้งหมดเมื่อหน้าโหลด
   }, []);
 
-  function renderStars(count) {
+  useEffect(() => {
+    const debounceTimeout = setTimeout(() => {
+      fetchFilteredReviews();  // ดึงข้อมูลรีวิวที่กรองตามเงื่อนไข searchTerm และ filterCategory
+    }, 500);
+
+    return () => {
+      clearTimeout(debounceTimeout);
+    };
+  }, [searchTerm, filterCategory]);
+  function renderStars(count, reviewId) {
     return (
       <div className="flex space-x-1">
         {Array(5).fill(0).map((_, i) => (
           <FaStar 
-            key={i} 
+            key={`star-${reviewId}-${i}`} 
             className={`text-lg ${i < count ? "text-[#fcce07]" : "text-[#e5e1d8]"}`}
           />
         ))}
@@ -80,7 +121,7 @@ export default function AllReviewPage() {
           <div className="p-6">
             <div className="mb-4">
               <p className="text-[#4a4a4a] mb-2">Your rating:</p>
-              {renderStars(selectedReview.rating || 0)}
+              {renderStars(selectedReview.rating || 0, selectedReview._id)}
             </div>
             <div className="text-[#2d2d2d] mb-6">
               <p className="whitespace-pre-line">{selectedReview.description}</p>
@@ -106,7 +147,7 @@ export default function AllReviewPage() {
     );
   };
 
-  const insightFilteredReviews = filteredReviews;
+  const insightFilteredReviews = reviews;
 
   return (
     <>
@@ -138,17 +179,19 @@ export default function AllReviewPage() {
                 <FaTag className="text-[#f8f4eb]" />
               </div>
               <select
-              className="pl-10 pr-10 py-3 w-full h-12 text-base rounded-lg bg-[#2b5d4a] text-[#f8f4eb] 
-              border border-[#2b5d4a] hover:border-[#7ea566] focus:ring-2 focus:ring-[#7ea566] focus:outline-none
-              transition duration-150 appearance-none" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}
-              aria-label="Filter by category">
-         <option value="">All Categories</option>
-         {categories.map((category, idx) => (
-          <option key={idx} value={category}>
-          {category}
-          </option>
-        ))}
-      </select>
+                className="pl-10 pr-10 py-3 w-full h-12 text-base rounded-lg bg-[#2b5d4a] text-[#f8f4eb] 
+                border border-[#2b5d4a] hover:border-[#7ea566] focus:ring-2 focus:ring-[#7ea566] focus:outline-none
+                transition duration-150 appearance-none"
+                value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}
+                aria-label="Filter by category"
+              >
+                <option value="">All Categories</option>
+                {uniqueCategories.map((category) => (
+                <option key={`category-${category}`} value={category}>
+                {category}
+                </option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -177,14 +220,14 @@ export default function AllReviewPage() {
                   : review.description;
                 return (
                   <div
-                    key={review._id}
+                    key={review._id || `review-${review.title}-${review.author}`}
                     className="border border-[#e5e1d8] rounded-lg shadow-sm bg-white hover:shadow-md transition-shadow cursor-pointer"
                     onClick={() => openReviewModal(review)}
                   >
                     <div className="p-5">
                       <div className="flex justify-between items-start mb-3">
                         <h2 className="text-xl font-semibold text-[#2b5d4a]">{review.title}</h2>
-                        <div>{renderStars(review.rating || 0)}</div>
+                        <div>{renderStars(review.rating || 0, review._id)}</div>
                       </div>
                       <p className="text-[#2d2d2d] mb-2">{shortDesc}</p>
                       <span className="text-[#7ea566] hover:text-[#568f3e] font-medium">Read more</span>
@@ -206,7 +249,7 @@ export default function AllReviewPage() {
           )}
         </div>
       </div>
-      <ReviewModal />
+      {isModalOpen && <ReviewModal />}
     </>
   );
 }
