@@ -1,47 +1,53 @@
-// app/api/review/[id]/like/route.js
-
-import { NextResponse } from 'next/server'
-import { ConnectDB } from '@/lib/config/db'
 import ReviewModel from "@/lib/models/ReviewModel";
+import { ConnectDB } from "@/lib/config/db";
 
-export async function POST(req, {params}) {
+export default async function handler(req, res) {
+  await ConnectDB();
+  const { id } = req.query;
+  const { userId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ success: false, message: 'กรุณาระบุ userId' });
+  }
+
   try {
-    await ConnectDB()
+    if (req.method === 'POST') {
+      const review = await ReviewModel.findById(id);
 
-    const { id } = params
-    const { userId } = await req.json()
+      if (!review) {
+        return res.status(404).json({ success: false, message: 'ไม่พบรีวิวที่ต้องการ' });
+      }
 
-    if (!userId || typeof userId !== 'string') {
-      return NextResponse.json({ success: false, message: 'Missing or invalid userId' }, { status: 400 })
+      const hasLiked = review.likedBy && review.likedBy.includes(userId);
+
+      if (hasLiked) {
+        await ReviewModel.findByIdAndUpdate(id, {
+          $inc: { likes: -1 },
+          $pull: { likedBy: userId }
+        });
+
+        return res.status(200).json({
+          success: true,
+          message: 'ยกเลิกการกดไลค์เรียบร้อยแล้ว',
+          action: 'unliked'
+        });
+      } else {
+        await ReviewModel.findByIdAndUpdate(id, {
+          $inc: { likes: 1 },
+          $push: { likedBy: userId }
+        });
+
+        return res.status(200).json({
+          success: true,
+          message: 'กดไลค์เรียบร้อยแล้ว',
+          action: 'liked'
+        });
+      }
     }
 
-    const review = await ReviewModel.findById(id)
-    if (!review) {
-      return NextResponse.json({ success: false, message: 'Review not found' }, { status: 404 })
-    }
-
-    // Ensure `likes` is always an array
-    if (!Array.isArray(review.likes)) {
-      review.likes = []
-    }
-
-    const alreadyLiked = review.likes.includes(userId)
-
-    if (alreadyLiked) {
-      review.likes = review.likes.filter(uid => uid !== userId)
-    } else {
-      review.likes.push(userId)
-    }
-
-    await review.save()
-
-    return NextResponse.json({
-      success: true,
-      liked: !alreadyLiked,
-      totalLikes: review.likes.length,
-    })
+    return res.status(405).json({ success: false, message: 'Method Not Allowed' });
   } catch (error) {
-    console.error('Error toggling like:', error)
-    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 })
+    console.error('Error handling like:', error);
+    return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดบนเซิร์ฟเวอร์' });
   }
 }
