@@ -1,57 +1,4 @@
-import React from "react";
-import ReviewService from "@/service/ReviewService";
-import Fetch from "@/service/Fetch";
-
-class TestimonialSection extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      reviews: [],  // ← แก้จาก users → reviews ให้ตรงกับข้อมูล
-      status: null,
-    };
-  }
-
-  componentDidMount() {
-    Fetch.getAllReviews().then((response) => {
-      this.setState({ reviews: response.data }); // ← แก้ตรงนี้ให้ตรงกับ state
-    });
-  }
-
-  render() {
-    return (
-      <div>
-        <h1 className="text-center">Reviews List</h1>
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Category</th>
-              <th>Image</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.reviews.map((review, index) => (
-              <tr key={index}>
-                <td>{review.title}</td>
-                <td>{review.description}</td>
-                <td>{review.category}</td>
-                <td>
-                  <img
-                    src={review.imageUrl}
-                    alt={review.title}
-                    width="100"
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
-}
-/*"use client";
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -219,6 +166,5 @@ const TestimonialSection = () => {
     </div>
   );
 };
-*/
 
 export default TestimonialSection;
