@@ -122,17 +122,33 @@ export default function BlogPage() {
     );
   }
 
-  const openReviewModal = (review) => {
-    // Increment view count when opening a review
-    const updatedReviews = reviews.map(r => 
-      r._id === review._id ? { ...r, views: (r.views || 0) + 1 } : r
-    );
-    setReviews(updatedReviews);
-    
-    setSelectedReview({...review, views: (review.views || 0) + 1});
+  const openReviewModal = async (review) => {
+    try {
+      const res = await fetch(`/api/review/${review._id}/view`, {
+        method: "POST",
+      });
+      const data = await res.json();
+  
+      if (data.success) {
+        const updatedReview = data.review;
+  
+        const updatedReviews = reviews.map(r =>
+          r._id === updatedReview._id ? updatedReview : r
+        );
+        setReviews(updatedReviews);
+        setSelectedReview(updatedReview);
+      } else {
+        setSelectedReview({ ...review, views: (review.views || 0) + 1 });
+      }
+    } catch (err) {
+      console.error("Error incrementing view count:", err);
+      setSelectedReview({ ...review, views: (review.views || 0) + 1 });
+    }
+  
     setIsModalOpen(true);
     document.body.style.overflow = 'hidden';
   };
+  
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -140,19 +156,31 @@ export default function BlogPage() {
     document.body.style.overflow = 'auto';
   };
 
-  const handleLikeReview = (reviewId, event) => {
+  const handleLikeReview = async (reviewId, event) => {
     event.stopPropagation();
-    
-    const updatedReviews = reviews.map(review =>
-      review._id === reviewId ? { ...review, likes: (review.likes || 0) + 1 } : review
-    );
-    
-    setReviews(updatedReviews);
-    
-    if (selectedReview && selectedReview._id === reviewId) {
-      setSelectedReview({...selectedReview, likes: (selectedReview.likes || 0) + 1});
+
+  try {
+    const res = await fetch(`/api/review/${reviewId}/like`, {
+      method: "POST",
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      const updatedReview = data.review;
+
+      const updatedReviews = reviews.map(r =>
+        r._id === reviewId ? updatedReview : r
+      );
+      setReviews(updatedReviews);
+
+      if (selectedReview && selectedReview._id === reviewId) {
+        setSelectedReview(updatedReview);
+      }
     }
-  };
+  } catch (err) {
+    console.error("Error liking review:", err);
+  }
+};
 
   const getRandomProfileColor = (authorName) => {
     const colors = ['#2b5d4a', '#7ea566', '#eab54e', '#e07a5f', '#8a5a83'];

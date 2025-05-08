@@ -4,11 +4,11 @@ import { NextResponse } from 'next/server'
 import { ConnectDB } from '@/lib/config/db'
 import ReviewModel from "@/lib/models/ReviewModel";
 
-export async function POST(req, context) {
+export async function POST(req, {params}) {
   try {
     await ConnectDB()
 
-    const { id } = context.params
+    const { id } = params
     const { userId } = await req.json()
 
     if (!userId || typeof userId !== 'string') {
