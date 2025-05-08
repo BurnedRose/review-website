@@ -11,7 +11,7 @@ export default function EditProfilePage() {
   const [profileImage, setProfileImage] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
-    username: "",
+    membername: "",
     bio: "",
     profileImageUrl: "",
   });
@@ -22,13 +22,13 @@ export default function EditProfilePage() {
   useEffect(() => {
     const storedImage = localStorage.getItem("profileImage");
     const storedName = localStorage.getItem("profileName");
-    const storedUsername = localStorage.getItem("profileUsername");
+    const storedMembername = localStorage.getItem("profileMembername");
     const storedBio = localStorage.getItem("profileBio");
 
     setProfileImage(storedImage || null);
     setFormData({
       name: storedName || "",
-      username: storedUsername || "",
+      membername: storedMembername || "",
       bio: storedBio || "Comsci",
     });
   }, []);
@@ -41,8 +41,7 @@ export default function EditProfilePage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // ตรวจสอบขนาดและชนิดของไฟล์
-    if (file.size > 5 * 1024 * 1024) { // ขนาดไฟล์เกิน 5MB
+    if (file.size > 5 * 1024 * 1024) {
       setUploadError("The image file is too large. Max size is 5MB.");
       return;
     }
@@ -77,7 +76,7 @@ export default function EditProfilePage() {
       const cloudinaryImageUrl = data.secure_url;
 
       setProfileImage(cloudinaryImageUrl);
-      localStorage.setItem("profileImage", cloudinaryImageUrl); // เก็บ URL รูปใน localStorage
+      localStorage.setItem("profileImage", cloudinaryImageUrl);
       return cloudinaryImageUrl;
     } catch (error) {
       console.error("Image upload failed:", error.message);
@@ -92,19 +91,18 @@ export default function EditProfilePage() {
     try {
       setSaveStatus("saving");
 
-      const finalImageUrl = imageUrl || profileImage; // ถ้าไม่อัปโหลดรูปใหม่ จะใช้รูปเดิมจาก localStorage
+      const finalImageUrl = imageUrl || profileImage;
 
-      // ส่งข้อมูลไปยัง API
-      const response = await fetch("/api/upload-profile", {
+      const response = await fetch("http://localhost:8080/api/upload-Memprofile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name: formData.name,
-          username: formData.username,
+          membername: formData.membername,
           bio: formData.bio,
-          profileImageUrl: finalImageUrl, // ส่ง URL ของรูปที่อัปโหลด
+          profileImageUrl: finalImageUrl,
         }),
       });
 
@@ -115,10 +113,10 @@ export default function EditProfilePage() {
         if (result.success) {
           setSaveStatus("success");
           localStorage.setItem("profileName", formData.name);
-          localStorage.setItem("profileUsername", formData.username);
+          localStorage.setItem("profileMembername", formData.membername);
           localStorage.setItem("profileBio", formData.bio);
-          localStorage.setItem("profileImage", finalImageUrl); // เก็บ URL รูปใน localStorage
-          
+          localStorage.setItem("profileImage", finalImageUrl);
+
           setTimeout(() => {
             router.push("/after");
           }, 1500);
@@ -138,14 +136,13 @@ export default function EditProfilePage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation
     if (!formData.name.trim()) {
       setSaveStatus("error-name");
       return;
     }
 
-    if (!formData.username.trim()) {
-      setSaveStatus("error-username");
+    if (!formData.membername.trim()) {
+      setSaveStatus("error-membername");
       return;
     }
 
@@ -185,9 +182,9 @@ export default function EditProfilePage() {
           message: "Please enter your name.",
           className: "bg-[rgba(255,0,0,0.1)] border border-red-300 text-red-700",
         };
-      case "error-username":
+      case "error-membername":
         return {
-          message: "Please enter a username.",
+          message: "Please enter a member name.",
           className: "bg-[rgba(255,0,0,0.1)] border border-red-300 text-red-700",
         };
       case "upload-error":
@@ -273,15 +270,15 @@ export default function EditProfilePage() {
             </div>
 
             <div className="mb-6">
-              <label className="block text-sm font-medium text-[#3a6959] mb-2">Username</label>
+              <label className="block text-sm font-medium text-[#3a6959] mb-2">Member Name</label>
               <div className="relative">
                 <span className="absolute left-3 top-3 text-[#3a6959]/60">@</span>
                 <input
                   type="text"
-                  name="username"
-                  value={formData.username}
+                  name="membername"
+                  value={formData.membername}
                   onChange={handleChange}
-                  placeholder="username"
+                  placeholder="membername"
                   className="w-full p-3 pl-8 text-[#3a6959] bg-[#f4f2ec] border border-[#e5e1d8] rounded-lg focus:ring-2 focus:ring-[#8fb277] focus:border-[#8fb277] outline-none transition"
                 />
               </div>

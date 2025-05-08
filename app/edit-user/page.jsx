@@ -95,7 +95,7 @@ export default function EditProfilePage() {
       const finalImageUrl = imageUrl || profileImage; // ถ้าไม่อัปโหลดรูปใหม่ จะใช้รูปเดิมจาก localStorage
 
       // ส่งข้อมูลไปยัง API
-      const response = await fetch("/api/upload-profile", {
+      const response = await fetch("http://localhost:8080/api/upload-profile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
